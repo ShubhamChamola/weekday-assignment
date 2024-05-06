@@ -9,6 +9,7 @@ function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline>
         <NavBar />
+        <Dashboard />
       </CssBaseline>
     </ThemeProvider>
   );

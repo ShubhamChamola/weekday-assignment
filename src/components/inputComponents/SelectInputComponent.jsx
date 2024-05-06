@@ -5,19 +5,27 @@ export default function SelectInputComponent({
   isMultiSelectInput = false,
   options,
   inputLabel,
-  inputPlaceholder,
+  filterSelected = true,
+  minWidth = null,
 }) {
   return (
     <Autocomplete
+      sx={{
+        ".MuiFormLabel-root": {
+          fontSize: "0.8rem",
+        },
+      }}
+      filterSelectedOptions={filterSelected}
       multiple={isMultiSelectInput}
       options={options}
       getOptionLabel={(option) => option}
       renderInput={(params) => (
         <TextField
+          fullWidth
           {...params}
-          variant="standard"
+          variant="outlined"
           label={inputLabel}
-          placeholder={inputPlaceholder}
+          sx={{ minWidth: minWidth ?? `calc(${inputLabel.length}ch + 80px)` }}
         />
       )}
     />
