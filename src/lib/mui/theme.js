@@ -3,6 +3,35 @@ import { createTheme } from "@mui/material/styles";
 const theme = createTheme({
   typography: {
     fontFamily: '"Lexend", sans-serif',
+    h3: {
+      fontSize: "1rem",
+      fontWeight: 400,
+      color: "black",
+      marginBottom: "0.25em",
+    },
+    h4: {
+      fontSize: "0.9rem",
+      fontWeight: 600,
+      color: "rgb(139, 139, 139)",
+      marginBottom: "0.15em",
+    },
+    h5: {
+      fontSize: "0.9rem",
+      fontWeight: 400,
+      color: "rgb(77, 89, 106)",
+      marginBottom: "0.15em",
+    },
+    body1: {
+      fontSize: "1rem",
+      color: "black",
+      fontWeight: 300,
+      marginBottom: "0.2em",
+    },
+    body2: {
+      fontSize: "0.85rem",
+      color: "black",
+      fontWeight: 300,
+    },
   },
   shape: {
     borderRadius: 10,
@@ -69,6 +98,25 @@ const theme = createTheme({
             padding: 0,
             fontSize: "0.8rem",
           },
+        },
+      },
+    },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          borderRadius: "10px",
+          fontWeight: 400,
+          fontSize: "1rem",
+          width: "100%",
+          padding: "10px 20px",
+
+          "&:hover": {
+            backgroundColor: "rgb(85, 239, 196)",
+          },
+        },
+        contained: {
+          backgroundColor: "rgb(85, 239, 196)",
+          color: "black",
         },
       },
     },

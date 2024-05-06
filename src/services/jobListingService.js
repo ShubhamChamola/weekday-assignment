@@ -10,7 +10,7 @@ export const getJobsData = createAsyncThunk(
       let offset = store.getState().jobListing.offset;
 
       let requestBody = {
-        limit: 10,
+        limit: 12,
         offset: offset,
       };
 
@@ -24,7 +24,7 @@ export const getJobsData = createAsyncThunk(
           maxSalary: job?.maxJdSalary ?? null,
           minSalary: job?.minJdSalary ?? null,
           currenyCode: job?.salaryCurrencyCode ?? null,
-          locatiom: job?.salaryCurrencyCode ?? null,
+          location: job?.location ?? null,
           minExperience: job?.minExp ?? null,
           maxExperience: job?.maxExp ?? null,
           role: job?.jobRole ?? null,

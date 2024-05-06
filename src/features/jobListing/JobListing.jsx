@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getJobsData } from "../../services/jobListingService";
 import { selectJobListingStates } from "./jobListingSlice";
 import { Status } from "../../utils/constants";
+import JobCard from "../../components/ui/JobCard";
 
 export default function JobListing() {
   const dispatch = useDispatch();
@@ -21,5 +22,13 @@ export default function JobListing() {
     console.log(jobs);
   }, [jobs]);
 
-  return <Grid container spacing={2}></Grid>;
+  return (
+    <Grid container spacing={5}>
+      {jobs.map((job) => (
+        <Grid key={job.id} item xs={12} sm={6} md={4} lg={3}>
+          <JobCard {...job} />
+        </Grid>
+      ))}
+    </Grid>
+  );
 }

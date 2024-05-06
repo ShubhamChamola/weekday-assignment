@@ -4,7 +4,7 @@ import JobListing from "../features/jobListing/JobListing";
 
 export default function Dashboard() {
   return (
-    <Stack direction="column" sx={{ gap: "2em" }}>
+    <Stack direction="column" sx={{ gap: "4em" }}>
       <JobFilter />
       <JobListing />
     </Stack>
