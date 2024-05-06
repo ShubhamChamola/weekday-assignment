@@ -1,7 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
+import jobFilterSlice from "../../features/jobFilter/jobFilterSlice";
 
 const store = configureStore({
-  reducer: {},
+  reducer: {
+    jobFilter: jobFilterSlice,
+  },
 });
 
 export default store;
