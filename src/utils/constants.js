@@ -23,3 +23,10 @@ export const MinBasePayOption = [
 export const ExperienceOption = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
 
 export const JobPrefOption = ["Remote", "On-site", "Hybrid"];
+
+export const Status = {
+  Idle: "idle",
+  Succeeded: "succeeded",
+  Failed: "failed",
+  Loading: "loading",
+};
