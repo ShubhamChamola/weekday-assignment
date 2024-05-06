@@ -7,14 +7,11 @@ export default function SelectInputComponent({
   inputLabel,
   filterSelected = true,
   minWidth = null,
+  allowCustomValue = false,
 }) {
   return (
     <Autocomplete
-      sx={{
-        ".MuiFormLabel-root": {
-          fontSize: "0.8rem",
-        },
-      }}
+      freeSolo={allowCustomValue}
       filterSelectedOptions={filterSelected}
       multiple={isMultiSelectInput}
       options={options}
