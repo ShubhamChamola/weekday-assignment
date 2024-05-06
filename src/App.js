@@ -1,3 +1,5 @@
+import "./style.scss";
+
 function App() {
   return <div className="App">Initialized a new Project</div>;
 }
