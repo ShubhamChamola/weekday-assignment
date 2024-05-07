@@ -52,7 +52,6 @@ export const selectJobListingStates = createSelector(
   (state) => state.jobListing.totalJobs,
 
   (filter, jobs, status, error, offset, totalJobs) => {
-    // console.log(filter);
     let filteredJobs = jobs.filter((job) => {
       // Filter by company
       if (
@@ -64,43 +63,52 @@ export const selectJobListingStates = createSelector(
       }
 
       // Filter by experience
-      // if (filter.experience && job.experience !== filter.experience) {
-      //   return false;
-      // }
+      if (
+        filter.experience &&
+        parseInt(job.minExperience) !== parseInt(filter.experience)
+      ) {
+        return false;
+      }
 
-      // // Filter by jobPreference
-      // if (filter.jobPreference && job.jobPreference !== filter.jobPreference) {
-      //   return false;
-      // }
+      // Filter by jobPreference
+      if (filter.jobPreference) {
+        if (filter.jobPreference.toLowerCase() === "remote") {
+          if (job.location.toLowerCase() !== "remote") {
+            return false;
+          }
+        } else {
+          if (job.location.toLowerCase() === "remote") {
+            return false;
+          }
+        }
+      }
 
-      // // Filter by location
-      // if (
-      //   filter.location.length > 0 &&
-      //   !filter.location.includes(job.location)
-      // ) {
-      //   return false;
-      // }
+      // Filter by location
+      if (
+        filter.location.length > 0 &&
+        !filter.location.includes(job.location)
+      ) {
+        return false;
+      }
 
-      // // Filter by pay
-      // if (filter.pay && job.pay !== filter.pay) {
-      //   return false;
-      // }
+      // Filter by pay
+      if (
+        filter.pay &&
+        (job.minSalary === null ||
+          parseInt(job.minSalary) < parseInt(filter.pay.replace("k", "")))
+      ) {
+        return false;
+      }
 
-      // // Filter by roles
-      // if (
-      //   filter.roles.length > 0 &&
-      //   !filter.roles.some((role) => job.roles.includes(role))
-      // ) {
-      //   return false;
-      // }
-
-      // // Filter by techStack
-      // if (
-      //   filter.techStack.length > 0 &&
-      //   !filter.techStack.some((stack) => job.techStack.includes(stack))
-      // ) {
-      //   return false;
-      // }
+      // Filter by roles
+      if (
+        filter.roles.length > 0 &&
+        !filter.roles
+          .map((role) => role.toLowerCase())
+          .includes(job.role.toLowerCase())
+      ) {
+        return false;
+      }
 
       return true; // Job matches all filters
     });

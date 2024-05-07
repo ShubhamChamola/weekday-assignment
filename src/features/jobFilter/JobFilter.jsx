@@ -29,18 +29,18 @@ export default function JobFilter() {
       />
       <SelectInputComponent
         id="experience"
-        inputLabel={"Experience"}
+        inputLabel={"Min Experience"}
         options={ExperienceOption}
         filterSelected={false}
-        minWidth="120px"
+        minWidth="150px"
         onChangeHandler={filterChangeHandler}
       />
       <SelectInputComponent
         id="pay"
-        inputLabel={"Min Base Pay"}
+        inputLabel={"Min Base Pay ($)"}
         options={MinBasePayOption}
         filterSelected={false}
-        minWidth="150px"
+        minWidth="160px"
         onChangeHandler={filterChangeHandler}
       />
       <TextInputComponent
@@ -52,7 +52,6 @@ export default function JobFilter() {
       <SelectInputComponent
         id="jobPreference"
         inputLabel="Job Preference"
-        isMultiSelectInput={true}
         options={JobPrefOption}
         minWidth="150px"
         onChangeHandler={filterChangeHandler}

@@ -44,7 +44,8 @@ export default function JobCard({
       <Stack direction={"column"} sx={{ gap: "10px", mt: "20px" }}>
         <Typography variant="h5">
           Estimated Salary: {currenyCode === "USD" ? "$" : "\u20B9"}
-          {minSalary && `${minSalary}${currenyCode === "USD" ? "K" : "L"} - `}
+          {minSalary && `${minSalary}${currenyCode === "USD" ? "K" : "L"}`}
+          {minSalary && maxSalary && " - "}
           {maxSalary && `${maxSalary}${currenyCode === "USD" ? "K" : "L"}`}
         </Typography>
         <Typography variant="h3" sx={{ mb: "-5px" }}>
