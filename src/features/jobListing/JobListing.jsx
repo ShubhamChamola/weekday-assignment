@@ -1,5 +1,5 @@
 import { Grid, Box, Stack, Typography } from "@mui/material";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getJobsData } from "../../services/jobListingService";
 import { selectJobListingStates } from "./jobListingSlice";
@@ -7,6 +7,7 @@ import { Status } from "../../utils/constants";
 import JobCard from "../../components/ui/JobCard";
 import Skeleton from "@mui/material/Skeleton";
 import NoDataFound from "../../assets/no-data-found.png";
+import { triggerJobFetch } from "./jobListingSlice";
 
 function LoadingSkeleton() {
   return (
@@ -81,9 +82,25 @@ export default function JobListing() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status]);
 
+  // For handling Scroll trigger
   useEffect(() => {
-    console.log(jobs, status);
-  }, [jobs]);
+    const handleScroll = () => {
+      const { scrollTop, clientHeight, scrollHeight } =
+        document.documentElement;
+
+      const bodyStyles = window.getComputedStyle(document.body);
+      const paddingBottom = parseInt(bodyStyles.paddingBottom, 10);
+
+      if (scrollTop + clientHeight >= scrollHeight - paddingBottom) {
+        dispatch(triggerJobFetch());
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   if (status !== Status.Succeeded && jobs.length === 0) {
     return <LoadingSkeleton />;
@@ -115,7 +132,7 @@ export default function JobListing() {
   }
 
   return (
-    <Box>
+    <Box id="scroll-trigger">
       <Grid container spacing={5}>
         {jobs.map((job) => (
           <Grid key={job.id} item xs={12} sm={6} md={4} lg={3}>
@@ -123,6 +140,11 @@ export default function JobListing() {
           </Grid>
         ))}
       </Grid>
+      {status === Status.Loading && (
+        <Box sx={{ mt: 5 }}>
+          <LoadingSkeleton />
+        </Box>
+      )}
     </Box>
   );
 }

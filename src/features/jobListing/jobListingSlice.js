@@ -13,16 +13,25 @@ const initialState = {
 export const jobFilterSlice = createSlice({
   name: "jobs",
   initialState,
-  reducers: {},
+  reducers: {
+    triggerJobFetch: (state, action) => {
+      if (state.status === Status.Succeeded && state.status !== Status.Failed) {
+        state.status = Status.Idle;
+      }
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getJobsData.pending, (state) => {
         state.status = Status.Loading;
       })
       .addCase(getJobsData.fulfilled, (state, action) => {
-        state.jobs = action.payload;
+        if (action.payload.length > 0) {
+          state.jobs = state.jobs.concat(action.payload);
+        }
+
         state.status = Status.Succeeded;
-        state.offset = action.payload.length;
+        state.offset = state.jobs.length;
       })
       .addCase(getJobsData.rejected, (state, action) => {
         state.status = Status.Failed;
@@ -44,5 +53,7 @@ export const selectJobListingStates = createSelector(
     };
   }
 );
+
+export const { triggerJobFetch } = jobFilterSlice.actions;
 
 export default jobFilterSlice.reducer;
