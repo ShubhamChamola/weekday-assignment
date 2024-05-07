@@ -20,7 +20,7 @@ function LogoContainer() {
 
 export default function NavBar() {
   return (
-    <Box sx={{ mb: "2em" }}>
+    <Box sx={{ mb: "40px" }}>
       <LogoContainer />
     </Box>
   );

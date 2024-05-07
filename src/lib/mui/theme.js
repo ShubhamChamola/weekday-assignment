@@ -39,16 +39,12 @@ const theme = createTheme({
   components: {
     MuiAutocomplete: {
       styleOverrides: {
-        root: {
-          height: "fit-content",
-        },
-
         inputRoot: {
           borderRadius: "5px",
           width: "100%",
           gap: "5px",
           fontSize: "0.8rem",
-          padding: "5px 10px",
+          padding: "10px 10px",
         },
 
         tag: {
@@ -91,11 +87,11 @@ const theme = createTheme({
     MuiInputBase: {
       styleOverrides: {
         root: {
-          padding: "5px 10px",
+          padding: "10px 10px",
           borderRadius: "5px !important",
           height: "100%",
           input: {
-            padding: 0,
+            padding: "8px 10px !important",
             fontSize: "0.8rem",
           },
         },
