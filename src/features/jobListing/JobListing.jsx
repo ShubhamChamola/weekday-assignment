@@ -1,5 +1,5 @@
 import { Grid, Box, Stack, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getJobsData } from "../../services/jobListingService";
 import { selectJobListingStates } from "./jobListingSlice";
@@ -9,71 +9,78 @@ import Skeleton from "@mui/material/Skeleton";
 import NoDataFound from "../../assets/no-data-found.png";
 import { triggerJobFetch } from "./jobListingSlice";
 
-function LoadingSkeleton() {
+function LoadingSkeletonWrapper() {
   return (
     <Box>
       <Grid container spacing={5}>
-        {Array.from({ length: 12 }, (_, index) => index + 1).map((index) => (
-          <Grid key={index} item xs={12} sm={6} md={4} lg={3}>
-            <Stack
-              sx={{
-                boxShadow: "rgba(0, 0, 0, 0.25) 0px 1px 4px 0px",
-                borderRadius: "20px",
-                padding: "20px",
-                height: 1,
-                transition: "all linear 0.3s",
+        <LoadingSkeleton />
+      </Grid>
+    </Box>
+  );
+}
 
-                "&:hover": {
-                  transform: "scale(1.01)",
-                },
-              }}
-            >
-              <Stack
-                direction={"row"}
-                sx={{ gap: "20px", alignItems: "center" }}
-              >
-                <Skeleton
-                  variant="circular"
-                  sx={{ flexShrink: 0, width: "60px", height: "60px" }}
-                ></Skeleton>
-                <Skeleton
-                  variant="rectangular"
-                  sx={{
-                    width: 1,
-                    height: "70%",
-                  }}
-                ></Skeleton>
-              </Stack>
-              <Stack
-                direction={"column"}
-                sx={{ gap: "10px", mt: "20px", height: "250px" }}
-              >
-                <Skeleton
-                  variant="rectangular"
-                  sx={{ width: 1, height: 1 }}
-                ></Skeleton>
-              </Stack>
+function LoadingSkeleton() {
+  return (
+    <>
+      {Array.from({ length: 12 }, (_, index) => index + 1).map((index) => (
+        <Grid key={index} item xs={12} sm={6} md={4} lg={3}>
+          <Stack
+            sx={{
+              boxShadow: "rgba(0, 0, 0, 0.25) 0px 1px 4px 0px",
+              borderRadius: "20px",
+              padding: "20px",
+              height: 1,
+              transition: "all linear 0.3s",
 
+              "&:hover": {
+                transform: "scale(1.01)",
+              },
+            }}
+          >
+            <Stack direction={"row"} sx={{ gap: "20px", alignItems: "center" }}>
               <Skeleton
+                variant="circular"
+                sx={{ flexShrink: 0, width: "60px", height: "60px" }}
+              ></Skeleton>
+              <Skeleton
+                variant="rectangular"
                 sx={{
                   width: 1,
-                  height: "80px",
-                  mt: "20px",
-                  borderRadius: "5px",
+                  height: "70%",
                 }}
               ></Skeleton>
             </Stack>
-          </Grid>
-        ))}
-      </Grid>
-    </Box>
+            <Stack
+              direction={"column"}
+              sx={{ gap: "10px", mt: "20px", height: "250px" }}
+            >
+              <Skeleton
+                variant="rectangular"
+                sx={{ width: 1, height: 1 }}
+              ></Skeleton>
+            </Stack>
+
+            <Skeleton
+              sx={{
+                width: 1,
+                height: "80px",
+                mt: "20px",
+                borderRadius: "5px",
+              }}
+            ></Skeleton>
+          </Stack>
+        </Grid>
+      ))}
+    </>
   );
 }
 
 export default function JobListing() {
   const dispatch = useDispatch();
 
-  const { jobs, status, error } = useSelector(selectJobListingStates);
+  const { jobs, status, error, offset, totalJobs } = useSelector(
+    selectJobListingStates
+  );
 
   useEffect(() => {
     if (status === Status.Idle) {
@@ -87,23 +94,27 @@ export default function JobListing() {
     const handleScroll = () => {
       const { scrollTop, clientHeight, scrollHeight } =
         document.documentElement;
-
-      const bodyStyles = window.getComputedStyle(document.body);
-      const paddingBottom = parseInt(bodyStyles.paddingBottom, 10);
-
-      if (scrollTop + clientHeight >= scrollHeight - paddingBottom) {
-        dispatch(triggerJobFetch());
+      if (scrollTop + clientHeight >= scrollHeight - 20) {
+        if (
+          offset !== totalJobs &&
+          status !== Status.Loading &&
+          jobs.length > 0
+        ) {
+          dispatch(triggerJobFetch());
+        }
       }
     };
 
     window.addEventListener("scroll", handleScroll);
+
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [jobs, status, offset, totalJobs]);
 
   if (status !== Status.Succeeded && jobs.length === 0) {
-    return <LoadingSkeleton />;
+    return <LoadingSkeletonWrapper />;
   }
 
   if (jobs.length === 0 && status === Status.Succeeded) {
@@ -134,17 +145,15 @@ export default function JobListing() {
   return (
     <Box id="scroll-trigger">
       <Grid container spacing={5}>
-        {jobs.map((job) => (
-          <Grid key={job.id} item xs={12} sm={6} md={4} lg={3}>
-            <JobCard {...job} />
-          </Grid>
+        {jobs.map((job, index) => (
+          <>
+            <Grid key={job.id} item xs={12} sm={6} md={4} lg={3}>
+              <JobCard {...job} />
+            </Grid>
+          </>
         ))}
+        {/* {status === Status.Loading && <LoadingSkeleton />} */}
       </Grid>
-      {status === Status.Loading && (
-        <Box sx={{ mt: 5 }}>
-          <LoadingSkeleton />
-        </Box>
-      )}
     </Box>
   );
 }

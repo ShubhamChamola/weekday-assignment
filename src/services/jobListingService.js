@@ -16,6 +16,8 @@ export const getJobsData = createAsyncThunk(
 
       let response = await Api.post(URL.jobListig.getJobData, requestBody);
 
+      let totalJobs = response.data?.totalCount;
+
       let jobData =
         response.data?.jdList?.map((job, index) => ({
           id: job?.jdUid ?? index,
@@ -32,7 +34,7 @@ export const getJobsData = createAsyncThunk(
           logo: job?.logoUrl ?? null,
         })) ?? [];
 
-      return jobData;
+      return { jobData, totalJobs };
     } catch (error) {
       console.log(error);
       throw error;
